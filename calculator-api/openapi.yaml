@@ -1,0 +1,62 @@
+openapi: 3.0.3
+info:
+  title: Calculator API
+  description: A stateless calculator API for basic arithmetic.
+  version: "1.0.0"
+
+servers:
+  - url: http://localhost:8080
+
+paths:
+  /calculate:
+    post:
+      summary: Perform a calculation
+      description: Stateless calculator that supports add, sub, mul, and div.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CalcRequest'
+      responses:
+        '200':
+          description: Successful calculation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CalcResponse'
+        '400':
+          description: Bad input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+
+components:
+  schemas:
+    CalcRequest:
+      type: object
+      required: [op, a, b]
+      properties:
+        op:
+          type: string
+          enum: [add, sub, mul, div]
+        a:
+          type: number
+        b:
+          type: number
+    CalcResponse:
+      type: object
+      properties:
+        result:
+          type: number
+    ErrorBody:
+      type: object
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+        field:
+          type: string
+          nullable: true
