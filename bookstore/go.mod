@@ -1,4 +1,4 @@
-module github.com/ishansaini194.Projects/bookstore
+module github.com/ishansaini194/Projects/bookstore
 
 go 1.25.5
 

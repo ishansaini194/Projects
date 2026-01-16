@@ -13,7 +13,7 @@ var (
 func Connect() {
 	d, err := gorm.Open(mysql.New(mysql.Config{
 		DriverName: "mysql",
-		DSN:        "gorm:gorm@tcp(localhost:9910)/gorm?charset=utf8&parseTime=True&loc=Local",
+		DSN:        "bookuser:bookpass@tcp(localhost:3306)/gorm?charset=utf8&parseTime=True&loc=Local",
 	}))
 	if err != nil {
 		panic("Failed to connect to database")
