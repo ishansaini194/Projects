@@ -1,17 +1,21 @@
-# Go Projects Portfolio
+# **Go Projects Portfolio**
 
 A collection of backend, CLI, and DevOps-oriented projects built using 
-Go and related technologies.
+**Go** and related technologies.
 
-📂 Projects
+---
 
-🎬 Movie CRUD API  
-A simple CRUD API demonstrating REST principles in Go.  
-➡️ /Movie-crud
+## 📂 **Projects**
 
-📚 Bookstore REST API  
-A RESTful CRUD API for managing books using Go, GORM, and MySQL.  
-➡️ View project: /bookstore
+🎬 **[Movie CRUD API](./Movie-crud)**
+A simple CRUD API demonstrating REST principles in Go.
 
-📌 How to Use Clone repository:
-`git clone https://github.com/ishansaini194/Projects.git`
+📚 **[Bookstore REST API](./bookstore)**
+A RESTful CRUD API for managing books using Go, GORM, and MySQL. 
+
+---
+
+## 📌 How to Use Clone repository:
+```bash
+git clone https://github.com/ishansaini194/Projects.git
+```
