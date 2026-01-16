@@ -1,17 +1,17 @@
-🚀 DevOps Projects Portfolio
+# Go Projects Portfolio
 
-This repository contains hands-on DevOps projects built to demonstrate
-real-world skills in automation, CI/CD, containerization, cloud, and monitoring.
-
-🛠 Tech Stack
-- Linux
-- Docker
-- Go
-- Kubernetes
-- Git & GitHub
-- AWS (EC2, S3, IAM)
+A collection of backend, CLI, and DevOps-oriented projects built using 
+Go and related technologies.
 
 📂 Projects
 
-📌 How to Use
-Clone the repository:
+🎬 Movie CRUD API  
+A simple CRUD API demonstrating REST principles in Go.  
+➡️ /Movie-crud
+
+📚 Bookstore REST API  
+A RESTful CRUD API for managing books using Go, GORM, and MySQL.  
+➡️ View project: /bookstore
+
+📌 How to Use Clone repository:
+`git clone https://github.com/ishansaini194/Projects.git`
