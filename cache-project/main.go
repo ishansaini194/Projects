@@ -18,14 +18,13 @@ type Queue struct {
 
 type Cache struct {
 	Queue Queue
-	Hash  map[string]*Node
+	Hash  Hash
 }
 
+type Hash map[string]*Node
+
 func NewCache() Cache {
-	return Cache{
-		Queue: NewQueue(),
-		Hash:  make(map[string]*Node),
-	}
+	return Cache{Queue: NewQueue(), Hash: Hash{}}
 }
 
 func NewQueue() Queue {
@@ -38,40 +37,41 @@ func NewQueue() Queue {
 	return Queue{Head: head, Tail: tail}
 }
 
-/* ---------------- Core Logic ---------------- */
-
 func (c *Cache) Check(word string) {
 	if node, found := c.Hash[word]; found {
-		c.moveToFront(node)
-	} else {
-		node := &Node{val: word}
-		c.addToFront(node)
-		c.Hash[word] = node
-
-		if c.Queue.Length > Size {
-			lru := c.Queue.Tail.Left
-			c.removeNode(lru)
-			delete(c.Hash, lru.val)
-		}
+		c.Remove(node)
+		c.Add(node)
+		return
 	}
+
+	node := &Node{val: word}
+	c.Add(node)
+	c.Hash[word] = node
 }
 
-func (c *Cache) moveToFront(node *Node) {
-	c.removeNode(node)
-	c.addToFront(node)
-}
+func (c *Cache) Remove(node *Node) *Node {
+	// never remove dummy nodes
+	if node == c.Queue.Head || node == c.Queue.Tail {
+		return nil
+	}
 
-func (c *Cache) removeNode(node *Node) {
 	left := node.Left
 	right := node.Right
 
 	left.Right = right
 	right.Left = left
 
+	node.Left = nil
+	node.Right = nil
+
 	c.Queue.Length--
+	delete(c.Hash, node.val)
+
+	return node
 }
 
-func (c *Cache) addToFront(node *Node) {
+func (c *Cache) Add(node *Node) {
+	// insert right after head (MRU)
 	first := c.Queue.Head.Right
 
 	c.Queue.Head.Right = node
@@ -80,16 +80,24 @@ func (c *Cache) addToFront(node *Node) {
 	first.Left = node
 
 	c.Queue.Length++
+	c.Hash[node.val] = node
+
+	if c.Queue.Length > Size {
+		// remove LRU (node before tail)
+		c.Remove(c.Queue.Tail.Left)
+	}
 }
 
-/* ---------------- Display ---------------- */
-
 func (c *Cache) Display() {
-	node := c.Queue.Head.Right
-	fmt.Printf("%d - [ ", c.Queue.Length)
-	for i := 0; i < c.Queue.Length; i++ {
+	c.Queue.Display()
+}
+
+func (q *Queue) Display() {
+	node := q.Head.Right
+	fmt.Printf("%d - [ ", q.Length)
+	for i := 0; i < q.Length; i++ {
 		fmt.Printf("{%s}", node.val)
-		if i < c.Queue.Length-1 {
+		if i < q.Length-1 {
 			fmt.Print(", ")
 		}
 		node = node.Right
@@ -100,10 +108,8 @@ func (c *Cache) Display() {
 func main() {
 	fmt.Println("START CACHE")
 	cache := NewCache()
-	for _, word := range []string{
-		"parrot", "avacado", "dragonfruit", "tree",
-		"potato", "tomato", "tree", "dog",
-	} {
+
+	for _, word := range []string{"parrot", "avacado", "dragonfruit", "tree", "potato", "tomato", "tree", "dog"} {
 		cache.Check(word)
 		cache.Display()
 	}
