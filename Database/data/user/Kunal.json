@@ -1,0 +1,12 @@
+{
+  "Name": "Kunal",
+  "Age": 17,
+  "Contact": "8968678456",
+  "Company": "Gov School",
+  "Address": {
+    "City": "Dinanagar",
+    "State": "Punjab",
+    "Country": "India",
+    "Pincode": 143531
+  }
+}

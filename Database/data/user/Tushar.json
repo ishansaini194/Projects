@@ -1,0 +1,12 @@
+{
+  "Name": "Tushar",
+  "Age": 20,
+  "Contact": "8968678456",
+  "Company": "Gov Hospital",
+  "Address": {
+    "City": "Faridkot",
+    "State": "Punjab",
+    "Country": "India",
+    "Pincode": 146001
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "Name": "Ishan",
+  "Age": 23,
+  "Contact": "8968678456",
+  "Company": "notGood",
+  "Address": {
+    "City": "Bhatoya",
+    "State": "Punjab",
+    "Country": "India",
+    "Pincode": 143534
+  }
+}
