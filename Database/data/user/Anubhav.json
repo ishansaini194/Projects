@@ -1,12 +1,12 @@
 {
-  "Name": "Anubhav",
-  "Age": 23,
-  "Contact": "8968678456",
-  "Company": "Pvt School",
-  "Address": {
-    "City": "Dinanagar",
-    "State": "Punjab",
-    "Country": "India",
-    "Pincode": 143531
+  "name": "Anubhav",
+  "age": 23,
+  "contact": "8968678456",
+  "company": "Pvt School",
+  "address": {
+    "city": "Dinanagar",
+    "state": "Punjab",
+    "country": "India",
+    "pincode": 143531
   }
 }
