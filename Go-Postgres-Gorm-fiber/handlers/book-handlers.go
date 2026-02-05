@@ -19,17 +19,14 @@ func (r *Repository) CreateBook(c *fiber.Ctx) error {
 	book := models.Book{}
 
 	if err := c.BodyParser(&book); err != nil {
-		return c.Status(http.StatusUnprocessableEntity).
-			JSON(fiber.Map{"message": "invalid request body"})
+		return RespondError(c, http.StatusUnprocessableEntity, "invalid request body")
 	}
 
 	if err := r.DB.Create(&book).Error; err != nil {
-		return c.Status(http.StatusBadRequest).
-			JSON(fiber.Map{"message": "could not create book"})
+		return RespondError(c, http.StatusInternalServerError, "could not create book")
 	}
 
-	return c.Status(http.StatusCreated).
-		JSON(fiber.Map{"message": "book created successfully", "data": book})
+	return RespondSuccess(c, http.StatusCreated, "book created successfully", book)
 }
 
 // GET ALL BOOKS
@@ -37,46 +34,38 @@ func (r *Repository) GetBooks(c *fiber.Ctx) error {
 	var books []models.Book
 
 	if err := r.DB.Find(&books).Error; err != nil {
-		return c.Status(http.StatusBadRequest).
-			JSON(fiber.Map{"message": "could not fetch books"})
+		return RespondError(c, http.StatusInternalServerError, "failed to fetch books")
 	}
 
-	return c.Status(http.StatusOK).
-		JSON(fiber.Map{"data": books})
+	return RespondSuccess(c, http.StatusOK, "", books)
 }
 
 // GET BOOK BY ID
 func (r *Repository) GetBookByID(c *fiber.Ctx) error {
 	id := c.Params("id")
 	if id == "" {
-		return c.Status(http.StatusBadRequest).
-			JSON(fiber.Map{"message": "id is required"})
+		return RespondError(c, http.StatusBadRequest, "id is required")
 	}
 
 	book := models.Book{}
 	if err := r.DB.First(&book, id).Error; err != nil {
-		return c.Status(http.StatusNotFound).
-			JSON(fiber.Map{"message": "book not found"})
+		return RespondError(c, http.StatusNotFound, "book not found")
 	}
 
-	return c.Status(http.StatusOK).
-		JSON(fiber.Map{"data": book})
+	return RespondSuccess(c, http.StatusOK, "", book)
 }
 
 // DELETE BOOK
 func (r *Repository) DeleteBook(c *fiber.Ctx) error {
 	id := c.Params("id")
 	if id == "" {
-		return c.Status(http.StatusBadRequest).
-			JSON(fiber.Map{"message": "id is required"})
+		return RespondError(c, http.StatusBadRequest, "id is required")
 	}
 
 	result := r.DB.Delete(&models.Book{}, id)
 	if result.Error != nil {
-		return c.Status(http.StatusBadRequest).
-			JSON(fiber.Map{"message": "could not delete book"})
+		return RespondError(c, http.StatusInternalServerError, "could not delete book")
 	}
 
-	return c.Status(http.StatusOK).
-		JSON(fiber.Map{"message": "book deleted successfully"})
+	return RespondSuccess(c, http.StatusOK, "book deleted successfully", nil)
 }
