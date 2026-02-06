@@ -6,7 +6,7 @@ A collection of backend related projects built using
 
 ## 📂 **Projects**
 
-**[Url Shortner](./urlshorten)**
+**[Url Shortner](./Urlshorten)**
 
 **[Movie CRUD API](./Movie-crud)**
 
