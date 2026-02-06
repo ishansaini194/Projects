@@ -1,16 +1,13 @@
 package routes
 
 import (
-	"os"
-	"strconv"
 	"time"
 
 	"github.com/asaskevich/govalidator"
 	"github.com/gofiber/fiber/v2"
-	"github.com/google/uuid"
-	"github.com/ishansaini194/Projects/database"
+	"github.com/ishansaini194/Projects/errors"
 	"github.com/ishansaini194/Projects/helpers"
-	"github.com/redis/go-redis/v9"
+	"github.com/ishansaini194/Projects/services"
 )
 
 type request struct {
@@ -28,6 +25,47 @@ type response struct {
 }
 
 func ShortenURL(c *fiber.Ctx) error {
+	body := new(request)
+
+	if err := c.BodyParser(body); err != nil {
+		return errors.Handle(c, errors.New(400, "Invalid JSON"))
+	}
+
+	if !govalidator.IsURL(body.URL) {
+		return errors.Handle(c, errors.New(400, "Invalid URL"))
+	}
+
+	if body.Expiry == 0 {
+		body.Expiry = 24
+	}
+
+	remaining, reset, err := services.CheckRateLimit(c.IP())
+	if err != nil {
+		return errors.Handle(c, errors.New(429, "Rate limit exceeded"))
+	}
+
+	body.URL = helpers.EnforceHTTP(body.URL)
+
+	id := services.GenerateID(body.CustomShort)
+
+	if services.Exists(id) {
+		return errors.Handle(c, errors.New(403, "Short URL already exists"))
+	}
+
+	if err := services.Save(id, body.URL, body.Expiry); err != nil {
+		return errors.Handle(c, err)
+	}
+
+	return c.JSON(response{
+		URL:             body.URL,
+		CustomShort:     services.BuildShortURL(id),
+		Expiry:          body.Expiry,
+		XRateRemaining:  remaining,
+		XRateLimitReset: reset,
+	})
+}
+
+/* func ShortenURL(c *fiber.Ctx) error {
 
 	body := new(request)
 
@@ -114,3 +152,4 @@ func ShortenURL(c *fiber.Ctx) error {
 	resp.CustomShort = os.Getenv("DOMAIN") + "/" + id
 	return c.Status(fiber.StatusOK).JSON(resp)
 }
+*/
