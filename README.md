@@ -1,16 +1,16 @@
 # **Go Projects Portfolio**
 
-A collection of backend, CLI, and DevOps-oriented projects built using 
+A collection of backend related projects built using 
 **Go** and related technologies.
 
 
 ## 📂 **Projects**
 
-🎬 **[Movie CRUD API](./Movie-crud) :**
-A simple CRUD API demonstrating REST principles in Go.
+**[Url Shortner](./urlshorten)**
 
-📚 **[Bookstore REST API](./bookstore) :**
-A RESTful CRUD API for managing books using Go, GORM, and MySQL. 
+**[Movie CRUD API](./Movie-crud)**
+
+**[Bookstore REST API](./bookstore)**
 
 ---
 
