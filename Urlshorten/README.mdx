@@ -1,0 +1,117 @@
+# 🔗 Go URL Shortener
+
+A fast and simple **URL Shortener backend** built using **Go**, **Fiber**, and **Redis**.  
+It allows users to shorten long URLs and redirect using short codes, with basic analytics support.
+
+---
+
+## 🚀 Features
+
+- Shorten long URLs
+- Redirect using short codes
+- Prevent shortening own domain
+- Automatic HTTP enforcement
+- Redis-based fast storage
+- Rate limiting to prevent abuse
+---
+
+## 🛠 Tech Stack
+
+- **Go**
+- **Fiber (v2)**
+- **Redis**
+- **Docker**
+- **Docker Compose**
+- **Postman (for testing)**
+
+---
+
+## 📁 Project Structure
+```text
+URLSHORTEN/
+│
+├── api/
+│   ├── database/
+│   │   └── database.go
+│   │
+│   ├── helpers/
+│   │   └── helpers.go
+│   │
+│   ├── routes/
+│   │   ├── resolve.go
+│   │   └── shorten.go
+│   │
+│   ├── .env
+│   │
+│   ├── Dockerfile
+│   │ 
+│   ├── go.mod
+│   ├── go.sum
+│   └── main.go
+│
+├── data/
+│   └── dump.rdb
+│
+├── db/
+│   └── Dockerfile
+│
+├── docker-compose.yml
+└── README.mdx
+```
+---
+
+## ▶️ How to Run (Docker Compose)
+
+### 1️⃣ Prerequisites
+- Docker
+
+
+### 2️⃣ Environment Setup
+
+Create an `.env` file inside the `api/` directory:
+
+```text
+DB_ADDR="db:6379"
+DB_PASSWORD=""
+APP_PORT=":3000"
+DOMAIN="localhost:3000"
+API_QUOTA=10
+```
+
+### 3️⃣ Build & Start Services
+
+From the project root:
+```command
+docker-compose up --build
+```
+
+### 4️⃣ Test API using Postman
+
+Once Docker Compose is running, open **Postman** and create a new request.
+
+#### ➤ Shorten URL
+
+- **Method:** `POST`
+- **URL:**  `http://localhost:3000/api/v1/`
+- **Body (raw → JSON):**
+```json
+{
+  "url": "https://www.example.com/some/long/url"
+}
+```
+### result:
+```json
+{
+  "url": "https://www.example.com/some/long/url",
+  "short": "localhost:3000/739059",
+  "expiry": 24,
+  "rate-limit": 9,
+  "rate-limit-reset": 30
+}
+```
+### 5️⃣ Stop Services
+
+```command
+docker-compose down
+```
+
