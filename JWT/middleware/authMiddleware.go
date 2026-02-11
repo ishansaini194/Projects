@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"net/http"
 
-	helper "github.com/akhil/golang-jwt-project/helpers"
 	"github.com/gin-gonic/gin"
+	"github.com/ishansaini194/Projects/helpers"
 )
 
 func Authenticate() gin.HandlerFunc {
@@ -17,7 +17,7 @@ func Authenticate() gin.HandlerFunc {
 			return
 		}
 
-		claims, err := helper.ValidateToken(clientToken)
+		claims, err := helpers.ValidateToken(clientToken)
 		if err != "" {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": err})
 			c.Abort()

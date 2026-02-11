@@ -15,13 +15,10 @@ import (
 func DBinstance() *mongo.Client {
 	err := godotenv.Load(".env")
 	if err != nil {
-		log.Fatal("Error load .env file")
+		log.Fatal("Error loading .env file")
 	}
 
-	MongoDb := os.Getenv("MONGO_URL")
-	if MongoDb == "" {
-		log.Fatal("MONGO_URL not found in environment")
-	}
+	MongoDb := os.Getenv("MONGODB_URL")
 
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
@@ -31,22 +28,14 @@ func DBinstance() *mongo.Client {
 		log.Fatal(err)
 	}
 
-	err = client.Ping(ctx, nil)
-	if err != nil {
-		log.Fatal("MongoDB ping failed:", err)
-	}
+	fmt.Println("Connected to MongoDB!")
 
-	fmt.Println("Connected to MongoDB")
 	return client
 }
 
 var Client *mongo.Client = DBinstance()
 
-func OpenConnection(client *mongo.Client, collectionName string) *mongo.Collection {
-	return client.Database("cluster0").Collection(collectionName)
+func OpenCollection(client *mongo.Client, collectionName string) *mongo.Collection {
+	var collection *mongo.Collection = client.Database("cluster0").Collection(collectionName)
+	return collection
 }
-
-// func OpenConnection(client *mongo.Client, collectionName string) *mongo.Collection {
-// 	var collection *mongo.Collection = client.Database("cluster0").Collection(collectionName)
-// 	return collection
-// }
