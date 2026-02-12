@@ -1,0 +1,87 @@
+Here is your content converted into **MDX format** (clean, documentation-ready):
+
+````mdx
+# Kafka + Go Setup Guide
+
+## 🐳 1. Install Docker & Docker Compose
+
+Make sure you have the following installed:
+
+- Docker
+- Docker Compose
+
+---
+
+## 🚀 2. Start Apache Kafka and Zookeeper
+
+Run the following command in the root directory:
+
+```bash
+docker-compose up -d
+````
+
+This will start:
+
+* Apache Kafka
+* Zookeeper
+
+---
+
+## 📦 3. Install Go Dependencies
+
+Inside your Go project, run:
+
+```bash
+go mod tidy
+```
+
+---
+
+## ▶️ 4. Start the Producer (REST API)
+
+Run:
+
+```bash
+go run producer/producer.go
+```
+
+This starts a REST API server on:
+
+```
+http://localhost:3000
+```
+
+---
+
+## 👷 5. Start the Consumer (Worker)
+
+In another terminal, run:
+
+```bash
+go run worker/worker.go
+```
+
+This starts the Kafka consumer that processes messages.
+
+---
+
+## 🧪 6. Test the Application
+
+Send a POST request to the API:
+
+```bash
+curl --location --request POST 'http://0.0.0.0:3000/api/v1/comments' \
+--header 'Content-Type: application/json' \
+--data-raw '{ "text":"message 1" }'
+```
+
+Send another request:
+
+```bash
+curl --location --request POST 'http://0.0.0.0:3000/api/v1/comments' \
+--header 'Content-Type: application/json' \
+--data-raw '{ "text":"message 2" }'
+```
+
+---
+
