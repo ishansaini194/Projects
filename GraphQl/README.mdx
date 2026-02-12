@@ -1,38 +1,175 @@
-Create a new folder for the Project mkdir gql-yt
-Mod init your project, give it whatever name you like go mod init github.com/akhil/gql-yt
-Get gql gen for your project go get github.com/99designs/gqlgen
-Add gqlgen to tools.go printf '// +build tools\npackage tools\nimport _ "github.com/99designs/gqlgen"' | gofmt > tools.go
-Get all the dependencies go mod tidy
-Initialize your project go run github.com/99designs/gqlgen init
-After you've written the graphql schema, run this - go run github.com/99designs/gqlgen generate
-After you've built the project, these are the queries to interact with the API -
-Get All Jobs
-query GetAllJobs{ jobs{ _id title description company url } }
+# GraphQLSetup (Go + gqlgen)
 
-=======================
+### Project Setup
 
-Create Job
-mutation CreateJobListing($input: CreateJobListingInput!){ createJobListing(input:$input){ _id title description company url } }
+#### 1️⃣ Create a New Folder
+```bash
+mkdir gql-yt
+cd gql-yt
+````
 
-{ "input": { "title": "Software Development Engineer - I", "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt", "company": "Google", "url": "www.google.com/" } }`
+#### 2️⃣ Initialize Go Module
 
-=========================
+```bash
+go mod init github.com/akhil/gql-yt
+```
 
-Get Job By Id
-query GetJob($id: ID!){ job(id:$id){ _id title description url company } }
+#### 3️⃣ Install gqlgen
 
-{ "id": "638051d7acc418c13197fdf7" }
+```bash
+go get github.com/99designs/gqlgen
+```
 
-=========================
+#### 4️⃣ Add gqlgen to tools.go
 
-Update Job By Id
-mutation UpdateJob($id: ID!,$input: UpdateJobListingInput!) { updateJobListing(id:$id,input:$input){ title description _id company url } }
+```bash
+printf '// +build tools\npackage tools\nimport _ "github.com/99designs/gqlgen"' | gofmt > tools.go
+```
 
-{ "id": "638051d3acc418c13197fdf6", "input": { "title": "Software Development Engineer - III" } }
+#### 5️⃣ Get All Dependencies
 
-=================================
+```bash
+go mod tidy
+```
 
-Delete Job By Id
-mutation DeleteQuery($id: ID!) { deleteJobListing(id:$id){ deletedJobId } }
+#### 6️⃣ Initialize gqlgen
 
-{ "id": "638051d3acc418c13197fdf6" }
+```bash
+go run github.com/99designs/gqlgen init
+```
+
+#### 7️⃣ After Writing Your GraphQL Schema
+
+```bash
+go run github.com/99designs/gqlgen generate
+```
+---
+
+# 🧪 GraphQL API Queries & Mutations
+
+---
+
+## 📌 Get All Jobs
+
+```graphql
+query GetAllJobs {
+  jobs {
+    _id
+    title
+    description
+    company
+    url
+  }
+}
+```
+
+---
+
+## ➕ Create Job
+
+```graphql
+mutation CreateJobListing($input: CreateJobListingInput!) {
+  createJobListing(input: $input) {
+    _id
+    title
+    description
+    company
+    url
+  }
+}
+```
+
+### Variables
+
+```json
+{
+  "input": {
+    "title": "Software Development Engineer - I",
+    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt",
+    "company": "Google",
+    "url": "www.google.com/"
+  }
+}
+```
+
+---
+
+## 🔍 Get Job By ID
+
+```graphql
+query GetJob($id: ID!) {
+  job(id: $id) {
+    _id
+    title
+    description
+    url
+    company
+  }
+}
+```
+
+### Variables
+
+```json
+{
+  "id": "638051d7acc418c13197fdf7"
+}
+```
+
+---
+
+## ✏️ Update Job By ID
+
+```graphql
+mutation UpdateJob($id: ID!, $input: UpdateJobListingInput!) {
+  updateJobListing(id: $id, input: $input) {
+    _id
+    title
+    description
+    company
+    url
+  }
+}
+```
+
+### Variables
+
+```json
+{
+  "id": "638051d3acc418c13197fdf6",
+  "input": {
+    "title": "Software Development Engineer - III"
+  }
+}
+```
+
+---
+
+## ❌ Delete Job By ID
+
+```graphql
+mutation DeleteQuery($id: ID!) {
+  deleteJobListing(id: $id) {
+    deletedJobId
+  }
+}
+```
+
+### Variables
+
+```json
+{
+  "id": "638051d3acc418c13197fdf6"
+}
+```
+
+---
+
+# ✅ Workflow Summary
+
+1. Setup Go project
+2. Install gqlgen
+3. Write GraphQL schema
+4. Run `generate`
+5. Start server
+6. Use above queries in GraphQL Playground
