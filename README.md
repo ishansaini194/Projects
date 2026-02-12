@@ -6,6 +6,8 @@ A collection of backend related projects built using
 
 ## 📂 **Projects**
 
+**[Kafka](./Kafka/)**
+
 **[GraphQL](./GraphQl/)**
 
 **[JWT](./JWT/)**
