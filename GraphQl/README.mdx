@@ -11,19 +11,19 @@ cd gql-yt
 #### 2️⃣ Initialize Go Module
 
 ```bash
-go mod init github.com/akhil/gql-yt
+go mod init github.com/yourusername/gql-yt
 ```
 
 #### 3️⃣ Install gqlgen
 
 ```bash
-go get github.com/99designs/gqlgen
+go get github.com/99designs/gqlgen@latest
 ```
 
 #### 4️⃣ Add gqlgen to tools.go
 
 ```bash
-printf '// +build tools\npackage tools\nimport _ "github.com/99designs/gqlgen"' | gofmt > tools.go
+printf '//go:build tools\n// +build tools\n\npackage tools\n\nimport _ "github.com/99designs/gqlgen"' | gofmt > tools.go
 ```
 
 #### 5️⃣ Get All Dependencies
@@ -35,13 +35,13 @@ go mod tidy
 #### 6️⃣ Initialize gqlgen
 
 ```bash
-go run github.com/99designs/gqlgen init
+gqlgen init
 ```
 
 #### 7️⃣ After Writing Your GraphQL Schema
 
 ```bash
-go run github.com/99designs/gqlgen generate
+gqlgen generate
 ```
 ---
 
