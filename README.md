@@ -6,6 +6,12 @@ A collection of backend related projects built using
 
 ## 📂 **Projects**
 
+**[GraphQL](./GraphQl/)**
+
+**[JWT](./JWT/)**
+
+**[Load Balancer](./LoadBalancer/)**
+
 **[Url Shortner](./Urlshorten)**
 
 **[Movie CRUD API](./Movie-crud)**
