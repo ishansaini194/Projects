@@ -6,8 +6,10 @@ require (
 	github.com/99designs/gqlgen v0.17.86
 	github.com/kelseyhightower/envconfig v1.4.0
 	github.com/segmentio/ksuid v1.0.4
+	github.com/tinrab/retry v1.0.0
 	github.com/vektah/gqlparser/v2 v2.5.31
 	google.golang.org/grpc v1.79.1
+	google.golang.org/protobuf v1.36.11
 )
 
 require (
@@ -21,5 +23,4 @@ require (
 	golang.org/x/sys v0.39.0 // indirect
 	golang.org/x/text v0.33.0 // indirect
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20251202230838-ff82c1b0f217 // indirect
-	google.golang.org/protobuf v1.36.11 // indirect
 )
