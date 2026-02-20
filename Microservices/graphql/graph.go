@@ -1,6 +1,10 @@
 package graphql
 
-import "github.com/ishansaini194/Projects/graphql"
+import (
+	"github.com/ishansaini194/Projects/account"
+	"github.com/ishansaini194/Projects/catalog"
+	"github.com/ishansaini194/Projects/graphql"
+)
 
 type Server struct {
 	accountClient *account.Client
