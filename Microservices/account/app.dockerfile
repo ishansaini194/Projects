@@ -1,13 +1,31 @@
-FROM golang:1.13-alpine3.11 AS build
-RUN apk --no-cache add gcc g++ make ca-certificates
-WORKDIR /go/src/github.com/akhilsharma90/go-graphql-microservice
-COPY go.mod go.sum ./
-COPY vendor vendor
-COPY account account
-RUN GO111MODULE=on go build -mod vendor -o /go/bin/app ./account/cmd/account
+# ---- Build Stage ----
+FROM golang:1.22-alpine AS builder
 
-FROM alpine:3.11
-WORKDIR /usr/bin
-COPY --from=build /go/bin .
+WORKDIR /app
+
+# Install certs (if your app makes HTTPS calls)
+RUN apk add --no-cache ca-certificates
+
+# Cache dependencies first
+COPY go.mod go.sum ./
+RUN go mod download
+
+# Copy source code
+COPY . .
+
+# Build static binary
+RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 \
+    go build -o app ./account/cmd/account
+
+# ---- Final Stage ----
+FROM alpine:latest
+
+WORKDIR /app
+
+RUN apk add --no-cache ca-certificates
+
+COPY --from=builder /app/app .
+
 EXPOSE 8080
-CMD ["app"]
+
+CMD ["./app"]
