@@ -4,7 +4,8 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/99designs/gqlgen/handler"
+	"github.com/99designs/gqlgen/graphql/handler"
+	"github.com/99designs/gqlgen/graphql/playground"
 	"github.com/kelseyhightower/envconfig"
 )
 
@@ -21,13 +22,13 @@ func main() {
 		log.Fatal(err)
 	}
 
-	s, err := NewGraphQLServer(cfg.AccountURL, cfg.CatalogURL, cfg.OrderURL)
+	s, err := NewGraphQLServer(cfg.AccountUrl, cfg.CatalogUrl, cfg.OrderUrl)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	http.Handle("/graphql", handler.New(s.ToExecutableSchema()))
-	http.Handle("/playground", Playground.Handler("akhil", "/graphql"))
+	http.Handle("/graphql", handler.NewDefaultServer(s.ToExecutableSchema()))
+	http.Handle("/playground", playground.Handler("GraphQL playground", "/graphql"))
 
 	log.Fatal(http.ListenAndServe(":8080", nil))
 }
