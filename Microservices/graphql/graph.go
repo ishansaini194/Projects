@@ -4,6 +4,7 @@ import (
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/ishansaini194/Projects/account"
 	"github.com/ishansaini194/Projects/catalog"
+	"github.com/ishansaini194/Projects/order"
 )
 
 type Server struct {
