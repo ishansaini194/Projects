@@ -5,6 +5,7 @@ go 1.25.7
 require (
 	github.com/99designs/gqlgen v0.17.87
 	github.com/kelseyhightower/envconfig v1.4.0
+	github.com/lib/pq v1.11.2
 	github.com/segmentio/ksuid v1.0.4
 	github.com/tinrab/retry v1.0.0
 	github.com/vektah/gqlparser/v2 v2.5.32
