@@ -2,14 +2,14 @@
 
 This project demonstrates a **microservices architecture** using:
 
-- **gRPC** for inter-service communication  
-- **GraphQL** as the API gateway  
+* **gRPC** for inter-service communication
+* **GraphQL** as the API gateway
 
 It includes services for:
 
-- Account management  
-- Product catalog  
-- Order processing  
+* Account management
+* Product catalog
+* Order processing
 
 ---
 
@@ -17,20 +17,20 @@ It includes services for:
 
 The project consists of the following main components:
 
-- **Account Service**
-- **Catalog Service**
-- **Order Service**
-- **GraphQL API Gateway**
+* **Account Service**
+* **Catalog Service**
+* **Order Service**
+* **GraphQL API Gateway**
 
 ---
 
 ## 🗄 Databases Used
 
-| Service  | Database        |
-|----------|-----------------|
-| Account  | PostgreSQL      |
-| Order    | PostgreSQL      |
-| Catalog  | Elasticsearch   |
+| Service | Database      |
+| ------- | ------------- |
+| Account | PostgreSQL    |
+| Order   | PostgreSQL    |
+| Catalog | Elasticsearch |
 
 ---
 
@@ -41,40 +41,73 @@ The project consists of the following main components:
 ```bash
 git clone <repository-url>
 cd <project-directory>
-````
-
-## 2️⃣ Start Services with Docker Compose
-
-```bash
-docker-compose up -d --build
-```
-
-## 3️⃣ Access GraphQL Playground
-
-```
-http://localhost:8000/playground
 ```
 
 ---
 
-# 📦 gRPC File Generation Steps
+## 2️⃣ Start Services (Docker Compose v2)
 
-## 1️⃣ Install protoc
+> Modern Docker uses `docker compose` (space), not `docker-compose`.
 
 ```bash
-wget https://github.com/protocolbuffers/protobuf/releases/download/v23.0/protoc-23.0-linux-x86_64.zip
-unzip protoc-23.0-linux-x86_64.zip -d protoc
+docker compose up -d --build
+```
+
+To stop:
+
+```bash
+docker compose down
+```
+
+---
+
+## 3️⃣ Access GraphQL Playground
+
+```
+http://localhost:8080/playground
+```
+
+---
+
+# 📦 gRPC File Generation (Latest Setup)
+
+---
+
+## 1️⃣ Install Latest protoc (Recommended Method)
+
+```bash
+PROTOC_VERSION=$(curl -s https://api.github.com/repos/protocolbuffers/protobuf/releases/latest | grep tag_name | cut -d '"' -f 4 | sed 's/v//')
+
+wget https://github.com/protocolbuffers/protobuf/releases/download/v${PROTOC_VERSION}/protoc-${PROTOC_VERSION}-linux-x86_64.zip
+
+unzip protoc-${PROTOC_VERSION}-linux-x86_64.zip -d protoc
+
 sudo mv protoc/bin/protoc /usr/local/bin/
+
+protoc --version
 ```
 
-## 2️⃣ Install Go Plugins
+---
+
+## 2️⃣ Install Latest Go gRPC Plugins (Version Pinned)
+
+> Always pin versions in real production projects.
 
 ```bash
-go install google.golang.org/protobuf/cmd/protoc-gen-go@latest
-go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@latest
+go install google.golang.org/protobuf/cmd/protoc-gen-go@v1.33.0
+go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@v1.3.0
 ```
 
-## 3️⃣ Add Go Bin to PATH
+Verify:
+
+```bash
+protoc-gen-go --version
+protoc-gen-go-grpc --version
+```
+
+---
+
+## 3️⃣ Ensure Go Bin is in PATH
 
 ```bash
 echo $PATH
@@ -82,26 +115,66 @@ export PATH="$PATH:$(go env GOPATH)/bin"
 source ~/.bashrc
 ```
 
+If using zsh:
+
+```bash
+source ~/.zshrc
+```
+
+---
+
 ## 4️⃣ Create `pb` Folder
 
-Create a folder named:
-
-```
-pb
+```bash
+mkdir -p pb
 ```
 
-## 5️⃣ Update `account.proto`
+---
 
-Add:
+## 5️⃣ Update `account.proto` (Modern Style)
+
+Instead of:
 
 ```proto
 option go_package = "./pb";
 ```
 
-## 6️⃣ Generate gRPC Files
+Use:
+
+```proto
+option go_package = "your-module-name/pb;pb";
+```
+
+Example:
+
+```proto
+option go_package = "github.com/yourusername/project/account/pb;pb";
+```
+
+⚠️ This avoids import issues in modern Go modules.
+
+---
+
+## 6️⃣ Generate gRPC Files (Modern Recommended Flags)
 
 ```bash
-protoc --go_out=./pb --go-grpc_out=./pb account.proto
+protoc \
+  --go_out=pb \
+  --go_opt=paths=source_relative \
+  --go-grpc_out=pb \
+  --go-grpc_opt=paths=source_relative \
+  account.proto
+```
+
+If multiple proto files:
+
+```bash
+protoc \
+  --go_out=pb \
+  --go_opt=paths=source_relative \
+  --go-grpc_out=pb \
+  --go-grpc_opt=paths=source_relative \
+  *.proto
 ```
 
 ---
@@ -156,7 +229,11 @@ query {
 
 ```graphql
 mutation {
-  createProduct(product: {name: "New Product", description: "A new product", price: 19.99}) {
+  createProduct(product: {
+    name: "New Product",
+    description: "A new product",
+    price: 19.99
+  }) {
     id
     name
     price
@@ -172,7 +249,9 @@ mutation {
 mutation {
   createOrder(order: {
     accountId: "account_id",
-    products: [{id: "product_id", quantity: 2}]
+    products: [
+      {id: "product_id", quantity: 2}
+    ]
   }) {
     id
     totalPrice
@@ -210,11 +289,16 @@ query {
 
 # 🔬 Advanced Queries
 
+---
+
 ## Pagination & Filtering
 
 ```graphql
 query {
-  products(pagination: {skip: 0, take: 5}, query: "search_term") {
+  products(
+    pagination: {skip: 0, take: 5},
+    query: "search_term"
+  ) {
     id
     name
     description
