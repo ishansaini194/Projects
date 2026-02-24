@@ -47,8 +47,6 @@ cd <project-directory>
 
 ## 2️⃣ Start Services (Docker Compose v2)
 
-> Modern Docker uses `docker compose` (space), not `docker-compose`.
-
 ```bash
 docker compose up -d --build
 ```
@@ -69,11 +67,11 @@ http://localhost:8080/playground
 
 ---
 
-# 📦 gRPC File Generation (Latest Setup)
+# 📦 gRPC File Generation
 
 ---
 
-## 1️⃣ Install Latest protoc (Recommended Method)
+## 1️⃣ Install Latest protoc
 
 ```bash
 PROTOC_VERSION=$(curl -s https://api.github.com/repos/protocolbuffers/protobuf/releases/latest | grep tag_name | cut -d '"' -f 4 | sed 's/v//')
@@ -89,9 +87,7 @@ protoc --version
 
 ---
 
-## 2️⃣ Install Latest Go gRPC Plugins (Version Pinned)
-
-> Always pin versions in real production projects.
+## 2️⃣ Install Latest Go gRPC Plugins
 
 ```bash
 go install google.golang.org/protobuf/cmd/protoc-gen-go@v1.33.0
@@ -131,12 +127,12 @@ mkdir -p pb
 
 ---
 
-## 5️⃣ Update `account.proto` (Modern Style)
+## 5️⃣ Update `account.proto`
 
 Instead of:
 
 ```proto
-option go_package = "./pb";
+option go_package = "github.com/ishansaini194/Projects/Microservices/<folder_name>/pb";
 ```
 
 Use:
