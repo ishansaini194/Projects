@@ -1,5 +1,5 @@
 # ---- Build Stage ----
-FROM golang:1.22-alpine AS builder
+FROM golang:1.25.7-alpine AS builder
 
 WORKDIR /app
 
@@ -15,7 +15,7 @@ COPY . .
 
 # Build static binary
 RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 \
-    go build -o app ./account/cmd/account
+    go build -o app ./catalog/cmd/catalog
 
 # ---- Final Stage ----
 FROM alpine:latest

@@ -5,6 +5,7 @@ import (
 	"database/sql"
 
 	"github.com/lib/pq"
+	_ "github.com/lib/pq"
 )
 
 type Repository interface {
@@ -137,6 +138,7 @@ func (r *postgresRepository) GetOrdersForAccount(ctx context.Context, accountID 
 
 	// Add last order (or first :D)
 	if lastOrder != nil {
+		// if lastOrder.ID != "" {
 		newOrder := Order{
 			ID:         lastOrder.ID,
 			AccountID:  lastOrder.AccountID,
