@@ -1,0 +1,271 @@
+# Microservices Architecture with gRPC and GraphQL
+
+This project demonstrates a **microservices architecture** using:
+
+- **gRPC** for inter-service communication  
+- **GraphQL** as the API gateway  
+
+It includes services for:
+
+- Account management  
+- Product catalog  
+- Order processing  
+
+---
+
+## ⚠️ Note from Akhil
+
+I built this project with the latest Go version and packages. However, in this particular codebase, I reverted to an older version of Go.
+
+### Why?
+
+Across all my production apps, I use older versions of Go for:
+
+- Better stability  
+- Easier debugging  
+- Predictable behavior  
+
+In projects with multiple moving parts like:
+
+- gRPC  
+- GraphQL  
+- PostgreSQL  
+- Docker Compose  
+- Elasticsearch  
+- Go  
+
+Each component updates frequently. This can introduce unexpected breaking changes.
+
+If you're a one-man team, keep your software manageable:
+
+> Use versions of software you’ve previously built with and trust.
+
+---
+
+# 🏗 Project Structure
+
+The project consists of the following main components:
+
+- **Account Service**
+- **Catalog Service**
+- **Order Service**
+- **GraphQL API Gateway**
+
+---
+
+## 🗄 Databases Used
+
+| Service  | Database        |
+|----------|-----------------|
+| Account  | PostgreSQL      |
+| Order    | PostgreSQL      |
+| Catalog  | Elasticsearch   |
+
+---
+
+# 🚀 Getting Started
+
+## 1️⃣ Clone the Repository
+
+```bash
+git clone <repository-url>
+cd <project-directory>
+````
+
+## 2️⃣ Start Services with Docker Compose
+
+```bash
+docker-compose up -d --build
+```
+
+## 3️⃣ Access GraphQL Playground
+
+```
+http://localhost:8000/playground
+```
+
+---
+
+# 📦 gRPC File Generation Steps
+
+## 1️⃣ Install protoc
+
+```bash
+wget https://github.com/protocolbuffers/protobuf/releases/download/v23.0/protoc-23.0-linux-x86_64.zip
+unzip protoc-23.0-linux-x86_64.zip -d protoc
+sudo mv protoc/bin/protoc /usr/local/bin/
+```
+
+## 2️⃣ Install Go Plugins
+
+```bash
+go install google.golang.org/protobuf/cmd/protoc-gen-go@latest
+go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@latest
+```
+
+## 3️⃣ Add Go Bin to PATH
+
+```bash
+echo $PATH
+export PATH="$PATH:$(go env GOPATH)/bin"
+source ~/.bashrc
+```
+
+## 4️⃣ Create `pb` Folder
+
+Create a folder named:
+
+```
+pb
+```
+
+## 5️⃣ Update `account.proto`
+
+Add:
+
+```proto
+option go_package = "./pb";
+```
+
+## 6️⃣ Generate gRPC Files
+
+```bash
+protoc --go_out=./pb --go-grpc_out=./pb account.proto
+```
+
+---
+
+# 🔮 GraphQL API Usage
+
+The GraphQL API provides a unified interface to interact with all microservices.
+
+---
+
+## 🔎 Query Accounts
+
+```graphql
+query {
+  accounts {
+    id
+    name
+  }
+}
+```
+
+---
+
+## ➕ Create an Account
+
+```graphql
+mutation {
+  createAccount(account: {name: "New Account"}) {
+    id
+    name
+  }
+}
+```
+
+---
+
+## 📦 Query Products
+
+```graphql
+query {
+  products {
+    id
+    name
+    price
+  }
+}
+```
+
+---
+
+## ➕ Create a Product
+
+```graphql
+mutation {
+  createProduct(product: {name: "New Product", description: "A new product", price: 19.99}) {
+    id
+    name
+    price
+  }
+}
+```
+
+---
+
+## 🛒 Create an Order
+
+```graphql
+mutation {
+  createOrder(order: {
+    accountId: "account_id",
+    products: [{id: "product_id", quantity: 2}]
+  }) {
+    id
+    totalPrice
+    products {
+      name
+      quantity
+    }
+  }
+}
+```
+
+---
+
+## 👤 Query Account with Orders
+
+```graphql
+query {
+  accounts(id: "account_id") {
+    name
+    orders {
+      id
+      createdAt
+      totalPrice
+      products {
+        name
+        quantity
+        price
+      }
+    }
+  }
+}
+```
+
+---
+
+# 🔬 Advanced Queries
+
+## Pagination & Filtering
+
+```graphql
+query {
+  products(pagination: {skip: 0, take: 5}, query: "search_term") {
+    id
+    name
+    description
+    price
+  }
+}
+```
+
+---
+
+## 💰 Calculate Total Spent by an Account
+
+```graphql
+query {
+  accounts(id: "account_id") {
+    name
+    orders {
+      totalPrice
+    }
+  }
+}
+```
+
+---
+
